@@ -1,6 +1,11 @@
 pipeline {
     agent any
 
+    tools {
+        jdk 'JDK17'
+        maven 'Maven3'
+    }
+
     stages {
         stage('Checkout') {
             steps {
@@ -9,30 +14,32 @@ pipeline {
             }
         }
 
-        stage('Build') {
+        stage('Build & Test') {
             steps {
-                bat 'mvn -B clean compile'
+                bat 'mvn -B clean verify'
             }
         }
 
-        stage('Test') {
+        stage('Results') {
             steps {
-                bat 'mvn test'
+                junit 'target\\surefire-reports\\*.xml'
             }
-            post {
-                always {
-                    junit 'target/surefire-reports/*.xml'
-                }
+        }
+
+        stage('Debug (opcional)') {
+            steps {
+                bat 'where mvn'
+                bat 'java -version'
             }
         }
     }
 
     post {
         success {
-            echo 'Build y tests ejecutados correctamente'
+            echo 'Build y tests OK ✅'
         }
         failure {
-            echo 'Error en build o tests'
+            echo 'Error en build o tests ❌'
         }
     }
 }
