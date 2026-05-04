@@ -5,7 +5,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 git branch: 'main',
-                    url: 'https://github.com/usuario/repositorio.git'
+                    url: 'https://github.com/zapatamix/jenkins-esport.git'
             }
         }
 

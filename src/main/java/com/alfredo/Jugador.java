@@ -1,4 +1,4 @@
-package Esport;
+package com.alfredo;
 
 import java.io.Serializable;
 
