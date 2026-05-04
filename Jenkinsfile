@@ -1,20 +1,22 @@
 pipeline {
     agent any
 
-    options {
-        timestamps()
+    tools {
+        jdk 'JDK17'
+        maven 'Maven3'
     }
 
     stages {
         stage('Checkout') {
             steps {
-                checkout scm
+                git branch: 'main',
+                    url: 'https://github.com/zapatamix/jenkins-esport.git'
             }
         }
 
         stage('Build') {
             steps {
-                sh 'mvn -B clean package'
+                sh 'mvn -B clean compile'
             }
         }
 
@@ -27,6 +29,15 @@ pipeline {
                     junit 'target/surefire-reports/*.xml'
                 }
             }
+        }
+    }
+
+    post {
+        success {
+            echo 'Build y tests ejecutados correctamente'
+        }
+        failure {
+            echo 'Error en build o tests'
         }
     }
 }
